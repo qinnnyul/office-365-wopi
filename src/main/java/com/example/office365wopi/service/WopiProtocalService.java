@@ -3,12 +3,20 @@ package com.example.office365wopi.service;
 import com.example.office365wopi.response.CheckFileInfoResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 public class WopiProtocalService {
@@ -16,35 +24,20 @@ public class WopiProtocalService {
     @Value("${localstorage.path}")
     private String filePath;
 
-    public void handleGetFileRequest(String name, HttpServletResponse response) {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        try {
-            String path = filePath + name;
-            File file = new File(path);
-            String filename = file.getName();
-            inputStream = new BufferedInputStream(new FileInputStream(path));
-            byte[] buffer = new byte[inputStream.available()];
-            inputStream.read(buffer);
-            response.reset();
+    public ResponseEntity<Resource> handleGetFileRequest(String name) throws UnsupportedEncodingException, FileNotFoundException {
+        String path = filePath + name;
+        File file = new File(path);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
-            response.addHeader("Content-Disposition", "attachment;filename=" +
-                    new String(filename.getBytes("utf-8"), "ISO-8859-1"));
-            response.addHeader("Content-Length", "" + file.length());
-            outputStream = new BufferedOutputStream(response.getOutputStream());
-            response.setContentType("application/octet-stream");
-            outputStream.write(buffer);
-            outputStream.flush();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                inputStream.close();
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment;filename=" +
+                new String(file.getName().getBytes("utf-8"), "ISO-8859-1"));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(resource);
     }
 
     /**
@@ -52,27 +45,9 @@ public class WopiProtocalService {
      * @param content
      * @TODO: rework on it based on the description of document
      */
-    public void handlePutFileRequest(String name, byte[] content) {
-        String path = filePath + name;
-        File file = new File(path);
-        FileOutputStream fop = null;
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            fop = new FileOutputStream(file);
-            fop.write(content);
-            fop.flush();
-            System.out.println("------------ save file ------------ ");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fop.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void handlePutFileRequest(String name, byte[] content) throws IOException {
+        Path path = Paths.get(filePath + name);
+        Files.write(path, content);
     }
 
     public void handleCheckFileInfoRequest(HttpServletRequest request, HttpServletResponse response) {

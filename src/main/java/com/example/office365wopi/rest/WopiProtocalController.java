@@ -2,10 +2,15 @@ package com.example.office365wopi.rest;
 
 import com.example.office365wopi.service.WopiProtocalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping(value = "/wopi")
@@ -19,12 +24,12 @@ public class WopiProtocalController {
     }
 
     @GetMapping("/files/{name}/contents")
-    public void getFile(@PathVariable(name = "name") String name, HttpServletResponse response) {
-        wopiProtocalService.handleGetFileRequest(name, response);
+    public ResponseEntity<Resource> getFile(@PathVariable(name = "name") String name) throws UnsupportedEncodingException, FileNotFoundException {
+        return wopiProtocalService.handleGetFileRequest(name);
     }
 
     @PostMapping("/files/{name}/contents")
-    public void putFile(@PathVariable(name = "name") String name, @RequestBody byte[] content) {
+    public void putFile(@PathVariable(name = "name") String name, @RequestBody byte[] content) throws IOException {
         wopiProtocalService.handlePutFileRequest(name, content);
     }
 
