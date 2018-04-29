@@ -1,4 +1,4 @@
-package com.example.office365wopi.rest.service;
+package com.example.office365wopi.service;
 
 import com.example.office365wopi.response.CheckFileInfoResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;

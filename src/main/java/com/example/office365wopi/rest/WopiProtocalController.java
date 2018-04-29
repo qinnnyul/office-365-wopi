@@ -1,6 +1,6 @@
 package com.example.office365wopi.rest;
 
-import com.example.office365wopi.rest.service.WopiProtocalService;
+import com.example.office365wopi.service.WopiProtocalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
