@@ -1,6 +1,6 @@
 package com.example.office365wopi.rest;
 
-import com.example.office365wopi.response.FileInfoResponse;
+import com.example.office365wopi.response.CheckFileInfoResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -58,7 +58,7 @@ public class WopiProtocalService {
 
     public void handleCheckFileInfoRequest(HttpServletRequest request, HttpServletResponse response) {
         String uri = request.getRequestURI();
-        FileInfoResponse info = new FileInfoResponse();
+        CheckFileInfoResponse info = new CheckFileInfoResponse();
         try {
             // 获取文件名, 防止中文文件名乱码
             String fileName = URLDecoder.decode(uri.substring(uri.indexOf("wopi/files/") + 11, uri.length()), "UTF-8");

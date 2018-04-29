@@ -5,57 +5,57 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public class FileInfoResponse implements Serializable {
+public class CheckFileInfoResponse implements Serializable {
     /**
-     * 文件名
+     * The string name of the file, including extension, without a path. Used for display in user interface (UI), and determining the extension of the file.
      */
     @JsonProperty("BaseFileName")
     public String baseFileName;
 
     /**
-     * 文件所有者的唯一编号
+     * A string that uniquely identifies the owner of the file. In most cases, the user who uploaded or created the file should be considered the owner.
      */
     @JsonProperty("OwnerId")
     public String ownerId;
 
     /**
-     * 文件大小，以bytes为单位
+     * The size of the file in bytes, expressed as a long, a 64-bit signed integer.
      */
     @JsonProperty("Size")
     public long size;
 
     /**
-     * 文件的256位bit的SHA-2编码散列内容
+     * A 256 bit SHA-2-encoded [FIPS 180-2] hash of the file contents, as a Base64-encoded string. Used for caching purposes in WOPI clients.
      */
     @JsonProperty("SHA256")
     public String sha256;
 
     /**
-     * 文件版本号，文件如果被编辑，版本号也要跟着改变
+     * The current version of the file based on the server’s file version schema, as a string. This value must change when the file changes, and version values must never repeat for a given file.
      */
     @JsonProperty("Version")
     public long version;
 
     /**
-     * 允许外部服务的连接
+     * A Boolean value that indicates a WOPI client may allow connections to external services referenced in the file (for example, a marketplace of embeddable JavaScript apps).
      */
     @JsonProperty("AllowExternalMarketplace")
     public boolean allowExternalMarketplace;
 
     /**
-     * 更改文件的权限
+     * A Boolean value that indicates that the user has permission to alter the file. Setting this to true tells the WOPI client that it can call PutFile on behalf of the user.
      */
     @JsonProperty("UserCanWrite")
     public boolean userCanWrite;
 
     /**
-     * 是否支持更新
+     * A Boolean value that indicates that the host supports the following WOPI operations:
      */
     @JsonProperty("SupportsUpdate")
     public boolean supportsUpdate;
 
     /**
-     * 是否支持锁定
+     * A Boolean value that indicates that the host supports the following WOPI operations:
      */
     @JsonProperty("SupportsLocks")
     public boolean supportsLocks;
