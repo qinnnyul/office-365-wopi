@@ -1,22 +1,20 @@
 package com.example.office365wopi.rest;
 
+import com.example.office365wopi.rest.service.WopiProtocalService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(value = "/wopi")
-public class WopiController {
+public class WopiProtocalController {
 
     private WopiProtocalService wopiProtocalService;
 
     @Autowired
-    public WopiController(WopiProtocalService wopiProtocalService) {
+    public WopiProtocalController(WopiProtocalService wopiProtocalService) {
         this.wopiProtocalService = wopiProtocalService;
     }
 
@@ -24,6 +22,12 @@ public class WopiController {
     public void getFile(@PathVariable(name = "name") String name, HttpServletResponse response) {
         wopiProtocalService.handleGetFileRequest(name, response);
     }
+
+    @PostMapping("/files/{name}/contents")
+    public void putFile(@PathVariable(name = "name") String name, @RequestBody byte[] content) {
+        wopiProtocalService.handlePutFileRequest(name, content);
+    }
+
 
     @GetMapping("/files/{name}")
     public void getFileInfo(HttpServletRequest request, HttpServletResponse response) {

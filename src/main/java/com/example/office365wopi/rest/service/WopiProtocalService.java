@@ -1,4 +1,4 @@
-package com.example.office365wopi.rest;
+package com.example.office365wopi.rest.service;
 
 import com.example.office365wopi.response.CheckFileInfoResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -56,6 +56,35 @@ public class WopiProtocalService {
         }
     }
 
+    /**
+     *
+     * @param name
+     * @param content
+     * @TODO: rework on it based on the description of document
+     */
+    public void handlePutFileRequest(String name, byte[] content) {
+        String path = filePath + name;
+        File file = new File(path);
+        FileOutputStream fop = null;
+        try {
+            if (!file.exists()) {
+                file.createNewFile();//构建文件
+            }
+            fop = new FileOutputStream(file);
+            fop.write(content);
+            fop.flush();
+            System.out.println("------------ save file ------------ ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fop.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void handleCheckFileInfoRequest(HttpServletRequest request, HttpServletResponse response) {
         String uri = request.getRequestURI();
         CheckFileInfoResponse info = new CheckFileInfoResponse();
@@ -92,12 +121,6 @@ public class WopiProtocalService {
         }
     }
 
-    /**
-     * 获取文件的SHA-256值
-     *
-     * @param file
-     * @return
-     */
     private String getHash256(File file) {
         String value = "";
         // 获取hash值
@@ -127,4 +150,5 @@ public class WopiProtocalService {
         }
         return value;
     }
+
 }
