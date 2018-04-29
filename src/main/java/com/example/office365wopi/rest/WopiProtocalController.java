@@ -1,13 +1,12 @@
 package com.example.office365wopi.rest;
 
+import com.example.office365wopi.response.CheckFileInfoResponse;
 import com.example.office365wopi.service.WopiProtocalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -35,8 +34,8 @@ public class WopiProtocalController {
 
 
     @GetMapping("/files/{name}")
-    public void getFileInfo(HttpServletRequest request, HttpServletResponse response) {
-        wopiProtocalService.handleCheckFileInfoRequest(request, response);
+    public ResponseEntity<CheckFileInfoResponse> getFileInfo(@PathVariable(name = "name") String name) throws UnsupportedEncodingException {
+        return wopiProtocalService.handleCheckFileInfoRequest(name);
     }
 
 

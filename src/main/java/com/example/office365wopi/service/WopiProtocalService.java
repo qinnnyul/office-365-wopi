@@ -1,7 +1,6 @@
 package com.example.office365wopi.service;
 
 import com.example.office365wopi.response.CheckFileInfoResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -10,8 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.file.Files;
@@ -50,33 +47,22 @@ public class WopiProtocalService {
         Files.write(path, content);
     }
 
-    public void handleCheckFileInfoRequest(HttpServletRequest request, HttpServletResponse response) {
-        String uri = request.getRequestURI();
+    public ResponseEntity<CheckFileInfoResponse> handleCheckFileInfoRequest(String name) throws UnsupportedEncodingException {
         CheckFileInfoResponse info = new CheckFileInfoResponse();
-        try {
-            // for Chinese encode
-            String fileName = URLDecoder.decode(uri.substring(uri.indexOf("wopi/files/") + 11, uri.length()), "UTF-8");
-            if (fileName != null && fileName.length() > 0) {
-                File file = new File(filePath + fileName);
-                if (file.exists()) {
-                    info.setBaseFileName(file.getName());
-                    info.setSize(file.length());
-                    info.setOwnerId("admin");
-                    info.setVersion(file.lastModified());
-                    info.setAllowExternalMarketplace(true);
-                    info.setUserCanWrite(true);
-                    info.setSupportsUpdate(true);
-                    info.setSupportsLocks(true);
-                }
+        String fileName = URLDecoder.decode(name, "UTF-8");
+        if (fileName != null && fileName.length() > 0) {
+            File file = new File(filePath + fileName);
+            if (file.exists()) {
+                info.setBaseFileName(file.getName());
+                info.setSize(file.length());
+                info.setOwnerId("admin");
+                info.setVersion(file.lastModified());
+                info.setAllowExternalMarketplace(true);
+                info.setUserCanWrite(true);
+                info.setSupportsUpdate(true);
+                info.setSupportsLocks(true);
             }
-
-            ObjectMapper mapper = new ObjectMapper();
-            String Json = mapper.writeValueAsString(info);
-
-            response.setContentType("application/json;charset=utf-8");
-            response.getWriter().write(Json);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE)).body(info);
     }
 }
