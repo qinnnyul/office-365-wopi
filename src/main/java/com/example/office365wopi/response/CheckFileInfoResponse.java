@@ -25,16 +25,11 @@ public class CheckFileInfoResponse implements Serializable {
     public long size;
 
     /**
-     * A 256 bit SHA-2-encoded [FIPS 180-2] hash of the file contents, as a Base64-encoded string. Used for caching purposes in WOPI clients.
-     */
-    @JsonProperty("SHA256")
-    public String sha256;
-
-    /**
      * The current version of the file based on the server’s file version schema, as a string. This value must change when the file changes, and version values must never repeat for a given file.
      */
     @JsonProperty("Version")
     public long version;
+
 
     /**
      * A Boolean value that indicates a WOPI client may allow connections to external services referenced in the file (for example, a marketplace of embeddable JavaScript apps).
@@ -88,15 +83,6 @@ public class CheckFileInfoResponse implements Serializable {
     }
 
     @JsonIgnore
-    public String getSha256() {
-        return sha256;
-    }
-
-    public void setSha256(String sha256) {
-        this.sha256 = sha256;
-    }
-
-    @JsonIgnore
     public long getVersion() {
         return version;
     }
@@ -147,7 +133,6 @@ public class CheckFileInfoResponse implements Serializable {
                 "baseFileName='" + baseFileName + '\'' +
                 ", ownerId='" + ownerId + '\'' +
                 ", size=" + size +
-                ", sha256='" + sha256 + '\'' +
                 ", version=" + version +
                 ", allowExternalMarketplace=" + allowExternalMarketplace +
                 ", userCanWrite=" + userCanWrite +
