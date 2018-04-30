@@ -1,7 +1,5 @@
 package com.example.office365wopi.rest;
 
-import com.example.office365wopi.exception.UnSupportedRequestException;
-import com.example.office365wopi.request.WopiRequestHeader;
 import com.example.office365wopi.response.CheckFileInfoResponse;
 import com.example.office365wopi.service.WopiProtocalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-
-import static com.example.office365wopi.request.WopiRequestType.valueOf;
 
 @RestController
 @RequestMapping(value = "/wopi")

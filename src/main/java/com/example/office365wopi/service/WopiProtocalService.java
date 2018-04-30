@@ -2,7 +2,6 @@ package com.example.office365wopi.service;
 
 import com.example.office365wopi.exception.UnSupportedRequestException;
 import com.example.office365wopi.request.WopiRequestHeader;
-import com.example.office365wopi.request.WopiRequestType;
 import com.example.office365wopi.response.CheckFileInfoResponse;
 import com.example.office365wopi.validator.WopiAuthenticationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
