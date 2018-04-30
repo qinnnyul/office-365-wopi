@@ -2,6 +2,7 @@ package com.example.office365wopi.service;
 
 import com.example.office365wopi.exception.UnSupportedRequestException;
 import com.example.office365wopi.request.WopiRequestHeader;
+import com.example.office365wopi.request.WopiRequestType;
 import com.example.office365wopi.response.CheckFileInfoResponse;
 import com.example.office365wopi.validator.WopiAuthenticationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +95,11 @@ public class WopiProtocalService {
                 responseEntity = this.handlePutRelativeFileRequest(name, request);
                 break;
             case LOCK:
-                responseEntity = this.handleLockRequest(name, request);
+                if (request.getHeader(WopiRequestHeader.OLD_LOCK.getName()) != null) {
+                    responseEntity = this.handleUnlockAndRelockRequest(name, request);
+                } else {
+                    responseEntity = this.handleLockRequest(name, request);
+                }
                 break;
             case UNLOCK:
                 responseEntity = this.handleUnLockRequest(name, request);
