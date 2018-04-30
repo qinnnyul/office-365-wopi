@@ -1,6 +1,8 @@
 package com.example.office365wopi.service;
 
 import com.example.office365wopi.response.CheckFileInfoResponse;
+import com.example.office365wopi.validator.WopiAuthenticationValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -9,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.file.Files;
@@ -21,7 +24,15 @@ public class WopiProtocalService {
     @Value("${localstorage.path}")
     private String filePath;
 
-    public ResponseEntity<Resource> handleGetFileRequest(String name) throws UnsupportedEncodingException, FileNotFoundException {
+    private WopiAuthenticationValidator validator;
+
+    @Autowired
+    public WopiProtocalService(WopiAuthenticationValidator validator) {
+        this.validator = validator;
+    }
+
+    public ResponseEntity<Resource> handleGetFileRequest(String name, HttpServletRequest request) throws UnsupportedEncodingException, FileNotFoundException {
+        this.validator.validate(request);
         String path = filePath + name;
         File file = new File(path);
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
@@ -40,14 +51,17 @@ public class WopiProtocalService {
     /**
      * @param name
      * @param content
+     * @param request
      * @TODO: rework on it based on the description of document
      */
-    public void handlePutFileRequest(String name, byte[] content) throws IOException {
+    public void handlePutFileRequest(String name, byte[] content, HttpServletRequest request) throws IOException {
+        this.validator.validate(request);
         Path path = Paths.get(filePath + name);
         Files.write(path, content);
     }
 
-    public ResponseEntity<CheckFileInfoResponse> handleCheckFileInfoRequest(String name) throws UnsupportedEncodingException {
+    public ResponseEntity<CheckFileInfoResponse> handleCheckFileInfoRequest(String name, HttpServletRequest request) throws UnsupportedEncodingException {
+        this.validator.validate(request);
         CheckFileInfoResponse info = new CheckFileInfoResponse();
         String fileName = URLDecoder.decode(name, "UTF-8");
         if (fileName != null && fileName.length() > 0) {

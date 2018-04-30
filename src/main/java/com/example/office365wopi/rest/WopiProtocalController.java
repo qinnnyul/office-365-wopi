@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -23,19 +24,19 @@ public class WopiProtocalController {
     }
 
     @GetMapping("/files/{name}/contents")
-    public ResponseEntity<Resource> getFile(@PathVariable(name = "name") String name) throws UnsupportedEncodingException, FileNotFoundException {
-        return wopiProtocalService.handleGetFileRequest(name);
+    public ResponseEntity<Resource> getFile(@PathVariable(name = "name") String name, HttpServletRequest request) throws UnsupportedEncodingException, FileNotFoundException {
+        return wopiProtocalService.handleGetFileRequest(name, request);
     }
 
     @PostMapping("/files/{name}/contents")
-    public void putFile(@PathVariable(name = "name") String name, @RequestBody byte[] content) throws IOException {
-        wopiProtocalService.handlePutFileRequest(name, content);
+    public void putFile(@PathVariable(name = "name") String name, @RequestBody byte[] content, HttpServletRequest request) throws IOException {
+        wopiProtocalService.handlePutFileRequest(name, content, request);
     }
 
 
     @GetMapping("/files/{name}")
-    public ResponseEntity<CheckFileInfoResponse> getFileInfo(@PathVariable(name = "name") String name) throws UnsupportedEncodingException {
-        return wopiProtocalService.handleCheckFileInfoRequest(name);
+    public ResponseEntity<CheckFileInfoResponse> getFileInfo(@PathVariable(name = "name") String name, HttpServletRequest request) throws UnsupportedEncodingException {
+        return wopiProtocalService.handleCheckFileInfoRequest(name, request);
     }
 
 
