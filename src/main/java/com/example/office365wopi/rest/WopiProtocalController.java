@@ -35,7 +35,7 @@ public class WopiProtocalController {
 
 
     @GetMapping("/files/{name}")
-    public ResponseEntity<CheckFileInfoResponse> getFileInfo(@PathVariable(name = "name") String name, HttpServletRequest request) throws UnsupportedEncodingException {
+    public ResponseEntity<CheckFileInfoResponse> getFileInfo(@PathVariable(name = "name") String name, HttpServletRequest request) throws UnsupportedEncodingException, FileNotFoundException {
         return wopiProtocalService.handleCheckFileInfoRequest(name, request);
     }
 

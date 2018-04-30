@@ -24,7 +24,7 @@ public class WopiAuthenticationValidator {
         wopiValidators.forEach(wopiValidator -> {
             if (!wopiValidator.validate(request)) {
                 if (wopiValidator instanceof WopiAccessTokenValidator) {
-                    throw new InvalidAccessTokenException("Invalid Token");
+                    throw new InvalidAccessTokenException("Invalid access token");
                 }
                 if (wopiValidator instanceof WopiProofKeyValidator) {
                     throw new InvalidProofKeyException("Invalid Proof Key");

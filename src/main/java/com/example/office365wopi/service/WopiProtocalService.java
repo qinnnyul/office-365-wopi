@@ -60,7 +60,7 @@ public class WopiProtocalService {
         Files.write(path, content);
     }
 
-    public ResponseEntity<CheckFileInfoResponse> handleCheckFileInfoRequest(String name, HttpServletRequest request) throws UnsupportedEncodingException {
+    public ResponseEntity<CheckFileInfoResponse> handleCheckFileInfoRequest(String name, HttpServletRequest request) throws UnsupportedEncodingException, FileNotFoundException {
         this.validator.validate(request);
         CheckFileInfoResponse info = new CheckFileInfoResponse();
         String fileName = URLDecoder.decode(name, "UTF-8");
@@ -75,6 +75,8 @@ public class WopiProtocalService {
                 info.setUserCanWrite(true);
                 info.setSupportsUpdate(true);
                 info.setSupportsLocks(true);
+            } else {
+                throw new FileNotFoundException("Resource not found/user unauthorized");
             }
         }
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE)).body(info);
