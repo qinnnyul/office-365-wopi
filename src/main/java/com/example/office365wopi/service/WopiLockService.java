@@ -17,22 +17,18 @@ public class WopiLockService {
     }
 
     public ResponseEntity handleLockRequest(String name, HttpServletRequest request) {
-        this.validator.validate(request);
         return null;
     }
 
     public ResponseEntity handleUnLockRequest(String name, HttpServletRequest request) {
-        this.validator.validate(request);
         return null;
     }
 
     public ResponseEntity handleRefreshLockRequest(String name, HttpServletRequest request) {
-        this.validator.validate(request);
         return null;
     }
 
     public ResponseEntity handleUnlockAndRelockRequest(String name, HttpServletRequest request) {
-        this.validator.validate(request);
         return null;
     }
 }

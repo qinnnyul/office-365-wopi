@@ -89,6 +89,7 @@ public class WopiProtocalService {
     }
 
     public ResponseEntity handleEditFileRequest(String name, HttpServletRequest request) {
+        this.validator.validate(request);
         ResponseEntity responseEntity;
         String requestType = request.getHeader(WopiRequestHeader.REQUEST_TYPE.getName());
         switch (valueOf(requestType)) {
