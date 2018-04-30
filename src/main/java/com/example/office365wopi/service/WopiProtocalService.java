@@ -29,10 +29,12 @@ public class WopiProtocalService {
     private String filePath;
 
     private WopiAuthenticationValidator validator;
+    private WopiLockService lockService;
 
     @Autowired
-    public WopiProtocalService(WopiAuthenticationValidator validator) {
+    public WopiProtocalService(WopiAuthenticationValidator validator, WopiLockService lockService) {
         this.validator = validator;
+        this.lockService = lockService;
     }
 
     public ResponseEntity<Resource> handleGetFileRequest(String name, HttpServletRequest request) throws UnsupportedEncodingException, FileNotFoundException {
@@ -95,19 +97,19 @@ public class WopiProtocalService {
                 break;
             case LOCK:
                 if (request.getHeader(WopiRequestHeader.OLD_LOCK.getName()) != null) {
-                    responseEntity = this.handleUnlockAndRelockRequest(name, request);
+                    responseEntity = this.lockService.handleUnlockAndRelockRequest(name, request);
                 } else {
-                    responseEntity = this.handleLockRequest(name, request);
+                    responseEntity = this.lockService.handleLockRequest(name, request);
                 }
                 break;
             case UNLOCK:
-                responseEntity = this.handleUnLockRequest(name, request);
+                responseEntity = this.lockService.handleUnLockRequest(name, request);
                 break;
             case REFRESH_LOCK:
-                responseEntity = this.handleRefreshLockRequest(name, request);
+                responseEntity = this.lockService.handleRefreshLockRequest(name, request);
                 break;
             case UNLOCK_AND_RELOCK:
-                responseEntity = this.handleUnlockAndRelockRequest(name, request);
+                responseEntity = this.lockService.handleUnlockAndRelockRequest(name, request);
                 break;
             default:
                 throw new UnSupportedRequestException("Operation not supported");
@@ -116,22 +118,6 @@ public class WopiProtocalService {
     }
 
     private ResponseEntity handlePutRelativeFileRequest(String name, HttpServletRequest request) {
-        return null;
-    }
-
-    private ResponseEntity handleLockRequest(String name, HttpServletRequest request) {
-        return null;
-    }
-
-    private ResponseEntity handleUnLockRequest(String name, HttpServletRequest request) {
-        return null;
-    }
-
-    private ResponseEntity handleRefreshLockRequest(String name, HttpServletRequest request) {
-        return null;
-    }
-
-    private ResponseEntity handleUnlockAndRelockRequest(String name, HttpServletRequest request) {
         return null;
     }
 }
