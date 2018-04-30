@@ -1,5 +1,7 @@
 package com.example.office365wopi.service;
 
+import com.example.office365wopi.exception.UnSupportedRequestException;
+import com.example.office365wopi.request.WopiRequestHeader;
 import com.example.office365wopi.response.CheckFileInfoResponse;
 import com.example.office365wopi.validator.WopiAuthenticationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static com.example.office365wopi.request.WopiRequestType.valueOf;
 
 @Service
 public class WopiProtocalService {
@@ -80,5 +84,50 @@ public class WopiProtocalService {
             }
         }
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE)).body(info);
+    }
+
+    public ResponseEntity handleEditFileRequest(String name, HttpServletRequest request) {
+        ResponseEntity responseEntity;
+        String requestType = request.getHeader(WopiRequestHeader.REQUEST_TYPE.getName());
+        switch (valueOf(requestType)) {
+            case PUT_RELATIVE_FILE:
+                responseEntity = this.handlePutRelativeFileRequest(name, request);
+                break;
+            case LOCK:
+                responseEntity = this.handleLockRequest(name, request);
+                break;
+            case UNLOCK:
+                responseEntity = this.handleUnLockRequest(name, request);
+                break;
+            case REFRESH_LOCK:
+                responseEntity = this.handleRefreshLockRequest(name, request);
+                break;
+            case UNLOCK_AND_RELOCK:
+                responseEntity = this.handleUnlockAndRelockRequest(name, request);
+                break;
+            default:
+                throw new UnSupportedRequestException("Operation not supported");
+        }
+        return responseEntity;
+    }
+
+    private ResponseEntity handlePutRelativeFileRequest(String name, HttpServletRequest request) {
+        return null;
+    }
+
+    private ResponseEntity handleLockRequest(String name, HttpServletRequest request) {
+        return null;
+    }
+
+    private ResponseEntity handleUnLockRequest(String name, HttpServletRequest request) {
+        return null;
+    }
+
+    private ResponseEntity handleRefreshLockRequest(String name, HttpServletRequest request) {
+        return null;
+    }
+
+    private ResponseEntity handleUnlockAndRelockRequest(String name, HttpServletRequest request) {
+        return null;
     }
 }
